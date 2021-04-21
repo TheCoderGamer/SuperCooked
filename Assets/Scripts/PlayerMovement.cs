@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
         bool y = Input.GetButton("Jump");
-        bool dashBut = Input.GetButton("Fire 3");
+        bool dashBut = Input.GetButton("Fire3");
         
         // Calcular si esta en el suelo
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
