@@ -33,4 +33,4 @@ Si quieres contribuir, deja una pull request y si los cambios me parecieran corr
 
 ## License
 
-Este proyecto esta bajo la licencia MIT - mira el archivo [LICENSE.md](LICENSE.md) para mas detalles
+Mira el archivo [LICENSE.md](LICENSE.md) para mas detalles
