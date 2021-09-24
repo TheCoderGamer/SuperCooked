@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour {
     [Header("Referencias")]
     public CharacterController controller;
     public Transform groundCheck;
+    public ParticleSystem jetpackParticles;
 
     [Header("Variables publicas")]
     [Range(1,20)]public float speed = 10;
@@ -14,23 +15,22 @@ public class PlayerMovement : MonoBehaviour {
     public LayerMask groundMask;
     [Range(0.1f,10)]public float jumpHeight = 2;
     [Range(1,10)]public int maxJumps = 2;
+    [Range(0.1f, 10)] public float jetpackForce = 2;
+    [Range(10f, 1000)] public float jetpackMaxFuel = 1000;
     [Range(1,30)]public float dashSpeed = 15f;
     [Range(0.01f,1)]public float dashTime = 0.25f;
     [Range(0.1f,20)]public float dashCooldown = 2f;
     [Range(0.01f,0.8f)]public float dashSmoothOn = 0.2f;
     [Range(0.01f,0.1f)]public float dashSmoothOff = 0.05f;
+    public Vector3 totalVelocity;
 
     // Variables privadas
     private Vector3 velocity;
     private bool isGrounded;
     private int jumps;
-    private bool jumping = false;
+    public bool jumping = false;
     private bool dashing = false;
-    float currentFOV;
-
-    private void Start() {
-    currentFOV = Camera.main.fieldOfView;    
-    }
+    [SerializeField]private float jetpackFuel = 0;
 
     void Update() {
         // Obtener input
@@ -46,6 +46,7 @@ public class PlayerMovement : MonoBehaviour {
             controller.slopeLimit = 45.0f;
             jumps = 0;
             jumping = false;
+            jetpackFuel = 0;
         }
 
         // Evitar transpasar objetos desde abajo
@@ -54,7 +55,7 @@ public class PlayerMovement : MonoBehaviour {
         }
 
         // Calcular input
-        Vector3 inputMove = Vector3.ClampMagnitude(transform.right * x + transform.forward * z, 1f) * speed * Time.deltaTime;
+        Vector3 inputMove = Vector3.ClampMagnitude(transform.right * x + transform.forward * z, 1f) * speed;
 
         // Salto
         if(y && !jumping && jumps < maxJumps) {
@@ -62,8 +63,17 @@ public class PlayerMovement : MonoBehaviour {
             controller.slopeLimit = 100.0f;
             velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
             jumps++;
+
         }
         if (!y) { jumping = false; }
+
+        // Jetpack
+        if(y && jumps >= maxJumps && jetpackFuel < jetpackMaxFuel && !jumping) {
+            controller.slopeLimit = 100.0f;
+            velocity.y = Mathf.Sqrt(jetpackForce* -1 * gravity);
+            jetpackFuel += 1f;
+            jetpackParticles.Play();
+        } else { jetpackParticles.Stop(); }
 
         // Dash
         if (!dashing && dashBut) {
@@ -74,9 +84,11 @@ public class PlayerMovement : MonoBehaviour {
         velocity.y += gravity * Time.deltaTime;
 
         // Aplicar movimientos
-        controller.Move((velocity * Time.deltaTime) + inputMove);
+        totalVelocity = (velocity) + (inputMove); // Usada por otros scrips
+        controller.Move((velocity * Time.deltaTime) + (inputMove * Time.deltaTime));
     }
-    IEnumerator Dash() {
+    // Dash
+    IEnumerator Dash() { 
         dashing = true;
         float startTime = Time.time;
         float t = 0;
