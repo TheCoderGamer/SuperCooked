@@ -11,11 +11,9 @@ public class Table : MonoBehaviour {
     Transform zone;
     PlayerManager pm;
     public bool disable = false;
-    public int tableType = 0; // 0 -> normal, 1 -> cortar, 2 -> freir
+    [SerializeField]private int tableType = 0; // 0 -> normal, 1 -> cortar, 2 -> freir
     private bool occupy = false;
     private Collider colOnTable = null;
-    private bool action1;
-    bool isPlayer = false;
     bool crafting = false;
 
     Transform foodContainer;
@@ -45,53 +43,50 @@ public class Table : MonoBehaviour {
 
     private void OnTriggerStay(Collider collider) {
         if (disable) { return; }
+        // Coger objeto
         if (!occupy && !pm.holding && collider.gameObject.CompareTag("Pickable")) {
             collider.transform.position = zone.position;
             collider.transform.rotation = zone.rotation;
             collider.gameObject.GetComponent<Rigidbody>().isKinematic = true;
             occupy = true;
             colOnTable = collider;
-        }
-        
-        // Crafteo
-        action1 = Input.GetButton("Action1");
-        if (collider.gameObject.CompareTag("Player")) {
-            isPlayer = true;
-        }
-        if (tableType > 0 && occupy && isPlayer && action1 && !crafting) {
+        }  
+    }
+    public void Action() { 
+        if (tableType > 0 && occupy && !crafting) {
             // Carne -> Carne Cortada Cruda
-            if (tableType == 1 && collider.name.Equals("f_carne")) {
-                StartCoroutine(Craft(collider, 2));
+            if      (tableType == 1 && colOnTable.name.StartsWith("f_carne")) {
+                StartCoroutine(Craft(colOnTable, 2));
             }
             // Carne Cortada -> Carne Cortada Frita
-            else if (tableType == 2 && collider.name.Equals("f_c_carne")) {
-                StartCoroutine(Craft(collider, 3));
+            else if (tableType == 2 && colOnTable.name.StartsWith("f_c_carne")) {
+                StartCoroutine(Craft(colOnTable, 3));
             }
             // Carne -> Carne Frita
-            else if (tableType == 2 && collider.name.Equals("f_carne")) {
-                StartCoroutine(Craft(collider, 1));
+            else if (tableType == 2 && colOnTable.name.StartsWith("f_carne")) {
+                StartCoroutine(Craft(colOnTable, 1));
             }
             // Carne Frita -> Carne Cortada Frita
-            else if (tableType == 1 && collider.name.Equals("f_f_carne")) {
-                StartCoroutine(Craft(collider, 3));
+            else if (tableType == 1 && colOnTable.name.StartsWith("f_f_carne")) {
+                StartCoroutine(Craft(colOnTable, 3));
             }
             
             // Pan -> Pan Cortado
-            else if (tableType == 1 && collider.name.Equals("f_pan")) {
-                StartCoroutine(Craft(collider, 11));
+            else if (tableType == 1 && colOnTable.name.StartsWith("f_pan")) {
+                StartCoroutine(Craft(colOnTable, 11));
             }
 
             // Queso -> Queso Cortado
-            else if (tableType == 1 && collider.name.Equals("f_queso")) {
-                StartCoroutine(Craft(collider, 7));
+            else if (tableType == 1 && colOnTable.name.StartsWith("f_queso")) {
+                StartCoroutine(Craft(colOnTable, 7));
             }
         }
     }
     // --------- CRAFTEO ----------
     IEnumerator Craft(Collider col, int craft) {
+        crafting = true;
         col.gameObject.tag = "Untagged";
         col.gameObject.layer = 6;
-        crafting = true;
         yield return new WaitForSeconds(1);
         Vector3 pos = col.transform.position;
         Quaternion rot = col.transform.rotation;
@@ -115,10 +110,6 @@ public class Table : MonoBehaviour {
             occupy = false;
             colOnTable = null;
         }
-        if (collider.gameObject.CompareTag("Player")) {
-            isPlayer = false;
-        }
     }
-
 }
 

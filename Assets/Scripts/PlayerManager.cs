@@ -3,31 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour {
+    #region Variables
     // Referencias
-    Camera cam;
-    // RayCast mirada
-    private RayCaster camHit;
-    // Objetos pickable
-    private Pickable pickable;
-    private SpringJoint spring;
-    private Transform pickupZone = null;
-    private Rigidbody pickableObject = null;
-    private Vector3 anglePickable;
-    public static bool slotFull = false;
-    private float pickUpRange = 5;
-    public bool lookingPickable = false;
-    private bool move = false, finish = false;
-    public bool holding = false;
-    [SerializeField] private float dropFowardForce = 80, dropUpwardForce = 80, stayForce = 18;
+    private Camera cam;
+    PlayerMovement pm;
     // Input
     public bool Fire1Down;
     private bool Fire1Up;
     private bool Fire2Down;
-
+    private bool Action1;
+    // RayCast
+    private RayCaster camHit;
+    // PickUp
+    private Pickable pickable = null;
+    private SpringJoint spring = null;
+    private Transform pickupZone = null;
+    private Rigidbody pickableObject = null;
+    private bool move = false, finish = false, lookingPickable = false;
+    public static bool slotFull = false;
+    public bool holding = false;
+    private float pickUpRange = 5;
+    [SerializeField] private float dropFowardForce = 80, dropUpwardForce = 80, stayForce = 18;
+    // Caja de comida
     private bool foodBoxActive = false;
-
     private Transform foodContainer;
-    PlayerMovement pm;
+    // Crafteo
+    private Table table = null;
+
+    #endregion
 
     private void Start() {
         pm = this.GetComponent<PlayerMovement>();
@@ -46,8 +49,17 @@ public class PlayerManager : MonoBehaviour {
         Fire1Down = Input.GetButton("Fire1");
         Fire1Up = Input.GetButtonUp("Fire1");
         Fire2Down = Input.GetButtonDown("Fire2");
+        Action1 = Input.GetButton("Action1");
+
         RayCasting();
         PickUpAbility();
+    }
+    private void OnTriggerStay(Collider collider) {
+        // Crafteo
+        table = collider.GetComponent<Table>();
+        if (table != null) {
+            CraftingSystem();
+        }
     }
 
     // RAYCAST
@@ -128,7 +140,6 @@ public class PlayerManager : MonoBehaviour {
             //pickableObject.transform.eulerAngles = Vector3.zero;
         }
     }
-
     private void PickUp(Rigidbody m_pickableObject) {
         pickable = m_pickableObject.GetComponent<Pickable>();
         move = true;
@@ -197,6 +208,34 @@ public class PlayerManager : MonoBehaviour {
         yield break;
     }
 
+    // CAJA COMIDA
+    private void FoodBoxPickUp(Collider col) {
+        foodBoxActive = true;
+        if (holding && pickableObject != null) {
+            Drop(pickableObject);
+        }
+        FoodBox fb = col.transform.parent.parent.GetComponent<FoodBox>();
+        GameObject _gameObject = fb.Pick();
+        pickableObject = _gameObject.GetComponent<Rigidbody>();
+        PickUp(pickableObject);
+    }
+    
+    // CRAFTEO MESA
+    private void CraftingSystem() {
+        if(Action1){
+            table.Action();
+        }
+    }
+
+
+
+    // Funciones utiles
+    private Vector3 SmoothApproach(Vector3 pastPosition, Vector3 pastTargetPosition, Vector3 targetPosition, float speed) {
+        float t = Time.deltaTime * speed;
+        Vector3 v = (targetPosition - pastTargetPosition) / t;
+        Vector3 f = pastPosition - pastTargetPosition + v;
+        return targetPosition - v + f * Mathf.Exp(-t);
+    }
     public float RoundTo45(float Decimal) {
         float i = Decimal % 45;
         if (i < 45 / 2) {
@@ -210,24 +249,5 @@ public class PlayerManager : MonoBehaviour {
         else {
             return 0f;
         }
-    }
-
-    void FoodBoxPickUp(Collider col) {
-        foodBoxActive = true;
-        if (holding && pickableObject != null) {
-            Drop(pickableObject);
-        }
-        FoodBox fb = col.transform.parent.parent.GetComponent<FoodBox>();
-        GameObject _gameObject = fb.Pick();
-        pickableObject = _gameObject.GetComponent<Rigidbody>();
-
-        PickUp(pickableObject);
-    }
-
-    private Vector3 SmoothApproach(Vector3 pastPosition, Vector3 pastTargetPosition, Vector3 targetPosition, float speed) {
-        float t = Time.deltaTime * speed;
-        Vector3 v = (targetPosition - pastTargetPosition) / t;
-        Vector3 f = pastPosition - pastTargetPosition + v;
-        return targetPosition - v + f * Mathf.Exp(-t);
     }
 }

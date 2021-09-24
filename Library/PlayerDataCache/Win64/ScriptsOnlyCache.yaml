@@ -600,4 +600,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/Level1.unity
-  playerPath: C:/Users/TheCo/Desktop/SuperCooked/SuperCooked.exe
+  playerPath: C:/Users/TheCo/Desktop/SC/SuperCooked.exe
