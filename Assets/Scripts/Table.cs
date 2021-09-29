@@ -9,12 +9,15 @@ using UnityEngine;
 
 public class Table : MonoBehaviour {
     Transform zone;
+    Transform zone2;
     PlayerManager pm;
     public bool disable = false;
     [SerializeField]private int tableType = 0; // 0 -> normal, 1 -> cortar, 2 -> freir
     private bool occupy = false;
     private Collider colOnTable = null;
-    bool crafting = false;
+    private Collider sarOnTable = null;
+    private bool crafting = false;
+    private bool conSarten = false;
 
     Transform foodContainer;
 
@@ -37,6 +40,7 @@ public class Table : MonoBehaviour {
 
     private void Start() {
         zone = transform.GetChild(0);
+        if (tableType == 2) { zone2 = transform.GetChild(1); }
         pm = FindObjectOfType<PlayerManager>();
         foodContainer = GameObject.Find("/Stage/Food").transform;
     }
@@ -44,71 +48,129 @@ public class Table : MonoBehaviour {
     private void OnTriggerStay(Collider collider) {
         if (disable) { return; }
         // Coger objeto
-        if (!occupy && !pm.holding && collider.gameObject.CompareTag("Pickable")) {
-            collider.transform.position = zone.position;
-            collider.transform.rotation = zone.rotation;
-            collider.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-            occupy = true;
+        if (!occupy && !pm.holding && colOnTable != collider && collider.name.StartsWith("f_")) {
+            PickUp(collider);
             colOnTable = collider;
-        }  
-    }
-    public void Action() { 
-        if (tableType > 0 && occupy && !crafting) {
-            // Carne -> Carne Cortada Cruda
-            if      (tableType == 1 && colOnTable.name.StartsWith("f_carne")) {
-                StartCoroutine(Craft(colOnTable, 2));
-            }
-            // Carne Cortada -> Carne Cortada Frita
-            else if (tableType == 2 && colOnTable.name.StartsWith("f_c_carne")) {
-                StartCoroutine(Craft(colOnTable, 3));
-            }
-            // Carne -> Carne Frita
-            else if (tableType == 2 && colOnTable.name.StartsWith("f_carne")) {
-                StartCoroutine(Craft(colOnTable, 1));
-            }
-            // Carne Frita -> Carne Cortada Frita
-            else if (tableType == 1 && colOnTable.name.StartsWith("f_f_carne")) {
-                StartCoroutine(Craft(colOnTable, 3));
-            }
-            
-            // Pan -> Pan Cortado
-            else if (tableType == 1 && colOnTable.name.StartsWith("f_pan")) {
-                StartCoroutine(Craft(colOnTable, 11));
-            }
+            occupy = true;
+        }
+        // Coger sarten como objeto
+        if (tableType == 0 && !occupy && !pm.holding && colOnTable != collider && collider.name.StartsWith("u_sarten")) {
+            PickUp(collider);
+            colOnTable = collider;
+            occupy = true;
+        }
+        // Coger sarten
+        if (tableType == 2 && !pm.holding && sarOnTable != collider && collider.name.StartsWith("u_sarten")) {
+            PickUp(collider);
+            sarOnTable = collider;
+            conSarten = true;
+        }
 
-            // Queso -> Queso Cortado
-            else if (tableType == 1 && colOnTable.name.StartsWith("f_queso")) {
-                StartCoroutine(Craft(colOnTable, 7));
-            }
+        if (occupy | conSarten) {
+            if (colOnTable != null) { colOnTable.tag = "OnTable"; }
+            if (sarOnTable != null) { sarOnTable.tag = "OnTable"; }
         }
     }
+    private void PickUp (Collider col) {
+        if (conSarten) {
+            col.transform.position = zone2.position;
+            col.transform.rotation = zone2.rotation;
+        } else {
+            col.transform.position = zone.position;
+            col.transform.rotation = zone.rotation;
+        }
+        col.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        col.gameObject.tag = "OnTable";
+        col.GetComponent<Pickable>().table = this.gameObject;
+    }
+    public GameObject Drop() {
+        if (!disable) {
+            if (!conSarten) {
+                sarOnTable = null;
+                conSarten = false;
+                occupy = false;
+                colOnTable.GetComponent<Pickable>().table = this.gameObject;
+                GameObject _conOnTable = colOnTable.gameObject;
+                colOnTable = null;
+                return _conOnTable;
+            }
+            if (conSarten && occupy) {
+                conSarten = true;
+                occupy = false;
+                colOnTable.GetComponent<Pickable>().table = this.gameObject;
+                GameObject _conOnTable = colOnTable.gameObject;
+                colOnTable = null;
+                return _conOnTable;
+            }
+            if (conSarten && !occupy) {
+                colOnTable = null;
+                conSarten = false;
+                sarOnTable.GetComponent<Pickable>().table = this.gameObject;
+                GameObject _sarOnTable = sarOnTable.gameObject;
+                sarOnTable = null;
+                return _sarOnTable;
+            }
+            else { return null; }
+        }
+        else { return null; }
+    }
+
     // --------- CRAFTEO ----------
+    public void Action() {
+        if (disable) { return; }
+        if (tableType > 0 && occupy && !crafting) {
+            // Carne -> Carne Cortada Cruda
+            craftLogic("f_carne", 2, 1);
+
+            // Carne Cortada -> Carne Cortada Frita
+            craftLogic("f_c_carne", 3, 2);
+
+            // Carne -> Carne Frita
+            craftLogic("f_carne", 1, 2);
+
+            // Carne Frita -> Carne Cortada Frita
+            craftLogic("f_f_carne", 3, 1);
+
+            // Pan -> Pan Cortado
+            craftLogic("f_pan", 11, 1);
+
+            // Queso -> Queso Cortado
+            craftLogic("f_queso", 7, 1);
+        }
+    }
+    private void craftLogic(string IN, int OUT, int tableTypeRequired) {
+        if (tableType == tableTypeRequired && colOnTable.name.StartsWith(IN)) {
+            if(tableTypeRequired == 2 && !conSarten) {
+                // Si es una vitroceramica y no tiene sarten no hacer nada
+                return;
+            }
+            crafting = true;
+            StartCoroutine(Craft(colOnTable, OUT));
+        }
+    }
     IEnumerator Craft(Collider col, int craft) {
-        crafting = true;
         col.gameObject.tag = "Untagged";
         col.gameObject.layer = 6;
         yield return new WaitForSeconds(1);
         Vector3 pos = col.transform.position;
         Quaternion rot = col.transform.rotation;
         Destroy(col.gameObject);
-        GameObject _gameObject = Instantiate(Resources.Load("Prefabs/food/" + foodPrefabs[craft]), pos, rot) as GameObject;
-        EndCrafting(_gameObject);
-    }
-
-    private void EndCrafting(GameObject gameObject) {
+        GameObject _clone = Instantiate(Resources.Load("Prefabs/food/" + foodPrefabs[craft]), pos, rot) as GameObject;
+        colOnTable = _clone.GetComponent<Collider>();
         crafting = false;
-        gameObject.transform.position = zone.position;
-        gameObject.transform.rotation = zone.rotation;
-        gameObject.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-        occupy = true;
-        colOnTable = gameObject.GetComponent<Collider>();
-        gameObject.transform.parent = foodContainer;
+        pm.crafting = false;
+        //colOnTable.transform.parent = foodContainer;
+        PickUp(colOnTable);
     }
-    private void OnTriggerExit(Collider collider) {
-        if (disable || colOnTable == null) { return; }
-        if (occupy && collider == colOnTable) { // Problema, se ejecuta al menos una vez aunq ya este suelto
+    
+    private void OnTriggerExit(Collider col) {
+        if (col == colOnTable) {
             occupy = false;
             colOnTable = null;
+        }
+        if (col == sarOnTable) {
+            conSarten = false;
+            sarOnTable = null;
         }
     }
 }

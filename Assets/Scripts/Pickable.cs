@@ -5,6 +5,7 @@ using UnityEngine;
 public class Pickable : MonoBehaviour {
 
     public bool touchingRB = false;
+    public GameObject table;
 
     private void Start() {
         this.transform.parent = GameObject.Find("/Stage/Food").transform;
@@ -15,6 +16,9 @@ public class Pickable : MonoBehaviour {
             this.gameObject.tag = "Pickable";
         }
         touchingRB = true;
+        /*if (collision.gameObject.name.StartsWith("e_mesa")){
+            //table = collision.gameObject;
+        }*/
     }
     private void OnCollisionExit() {
         touchingRB = false;

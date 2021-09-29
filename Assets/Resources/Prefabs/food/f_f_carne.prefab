@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6910531255351494587}
   - component: {fileID: 734869662534663839}
   - component: {fileID: 7028912162097720779}
+  - component: {fileID: 5631189225904709513}
   m_Layer: 6
   m_Name: f_f_carne
   m_TagString: Pickable
@@ -47,6 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29f74c1e1d75254f95f14943952e0f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchingRB: 0
+  table: {fileID: 0}
 --- !u!54 &3984250494336542061
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -121,8 +124,21 @@ MeshCollider:
   m_GameObject: {fileID: 1947310744497794779}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2432090755550338912, guid: f371e802871ab4a4d93279d60bc2ae9e, type: 3}
+--- !u!65 &5631189225904709513
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947310744497794779}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6250012, y: 0.5000012, z: 0.5000012}
+  m_Center: {x: 0, y: -0.0625, z: 0}

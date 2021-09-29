@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour {
+    public Collider tempDebug;
     #region Variables
     // Referencias
     private Camera cam;
@@ -25,10 +26,12 @@ public class PlayerManager : MonoBehaviour {
     private float pickUpRange = 5;
     [SerializeField] private float dropFowardForce = 80, dropUpwardForce = 80, stayForce = 18;
     // Caja de comida
-    private bool foodBoxActive = false;
+    private bool pickingFoodBox = false;
     private Transform foodContainer;
+    // Mesa
+    private bool pickingTable = false;
     // Crafteo
-    private Table table = null;
+    public bool crafting = false;
 
     #endregion
 
@@ -54,13 +57,6 @@ public class PlayerManager : MonoBehaviour {
         RayCasting();
         PickUpAbility();
     }
-    private void OnTriggerStay(Collider collider) {
-        // Crafteo
-        table = collider.GetComponent<Table>();
-        if (table != null) {
-            CraftingSystem();
-        }
-    }
 
     // RAYCAST
     private void RayCasting() {
@@ -77,11 +73,12 @@ public class PlayerManager : MonoBehaviour {
             pickableObject = collider.GetComponent<Rigidbody>();
             lookingPickable = true;
         }
-        else if (Fire1Down && !foodBoxActive && collider.gameObject.CompareTag("FoodBoxHolo")) {
+        else if (Fire1Down && !pickingFoodBox && collider.gameObject.CompareTag("FoodBoxHolo")) {
             FoodBoxPickUp(collider);
         }
     }
     private void RayCastStay(Collider collider) {
+        tempDebug = collider;
         if (!finish && !holding && collider.gameObject.CompareTag("Pickable")) {
             pickableObject = collider.GetComponent<Rigidbody>();
             lookingPickable = true;
@@ -89,8 +86,14 @@ public class PlayerManager : MonoBehaviour {
         else if (!collider.gameObject.CompareTag("Pickable")) {
             lookingPickable = false;
         }
-        if (Fire1Down && !foodBoxActive && collider.gameObject.CompareTag("FoodBoxHolo")) {
+        if (Fire1Down && !pickingFoodBox && collider.gameObject.CompareTag("FoodBoxHolo")) {
             FoodBoxPickUp(collider);
+        }
+        if (Fire1Down && !holding && !pickingTable && collider.gameObject.CompareTag("OnTable")) {
+            TablePickUp(collider);
+        }
+        if (!crafting && !holding && Action1 && collider.gameObject.CompareTag("OnTable")) {
+            CraftingSystem(collider);
         }
     }
     private void RayCastExit(Collider collider) {
@@ -101,7 +104,7 @@ public class PlayerManager : MonoBehaviour {
     
     // PICKUP
     private void PickUpAbility() {
-        // Check
+        // Check spring
         if(holding && pickable != null && spring != null) {
             if (pickable.touchingRB == true) {
                 spring.breakForce = 20;
@@ -112,6 +115,8 @@ public class PlayerManager : MonoBehaviour {
         }
         if (spring == null && holding) {
             Drop(pickableObject);
+            Fire1Down = false;
+            Fire1Up = true;
         }
 
         // PickUp
@@ -121,13 +126,14 @@ public class PlayerManager : MonoBehaviour {
         // Drop
         if (holding && Fire1Up && pickableObject != null) {
             Drop(pickableObject);
-        }
+        } else if (holding && Fire1Up) { holding = false; }
         // Throw
         if (holding && Fire2Down && pickableObject != null) {
             Throw(pickableObject);
         }
         // Keep
         if (move) {
+            pickableObject.tag = "Pickable";
             Vector3 pastPosition = pickableObject.gameObject.transform.position;
             //Vector3 pastTargetPosition = pickupZone.position;
             //Vector3 moveCube = SmoothApproach(pastPosition, pastTargetPosition, pickupZone.position, 20f);
@@ -153,6 +159,7 @@ public class PlayerManager : MonoBehaviour {
         m_pickableObject.isKinematic = false;
         m_pickableObject.transform.SetParent(foodContainer);
         m_pickableObject.transform.position = pickupZone.transform.position;
+        m_pickableObject.tag = "Pickable";
         
         spring = pickupZone.gameObject.AddComponent<SpringJoint>() as SpringJoint;
         spring.breakForce = 1000f;
@@ -178,7 +185,8 @@ public class PlayerManager : MonoBehaviour {
         float velZ = pm.totalVelocity.z / 2;
         m_pickableObject.velocity = new Vector3(velX, -0.5f, velZ);
         StartCoroutine(FinishPickUp(m_pickableObject));
-        foodBoxActive = false;
+        pickingFoodBox = false;
+        pickingTable = false;
         if (spring != null) {
             Destroy(spring);
         }
@@ -210,7 +218,7 @@ public class PlayerManager : MonoBehaviour {
 
     // CAJA COMIDA
     private void FoodBoxPickUp(Collider col) {
-        foodBoxActive = true;
+        pickingFoodBox = true;
         if (holding && pickableObject != null) {
             Drop(pickableObject);
         }
@@ -219,11 +227,24 @@ public class PlayerManager : MonoBehaviour {
         pickableObject = _gameObject.GetComponent<Rigidbody>();
         PickUp(pickableObject);
     }
+    // Mesa
+    private void TablePickUp(Collider col) {
+        pickingTable = true;
+        Pickable pickable = col.GetComponent<Pickable>();
+        Table table = pickable.table.GetComponent<Table>();
+        GameObject _gameObject = table.Drop();
+        if (_gameObject != null) {
+            pickableObject = _gameObject.GetComponent<Rigidbody>();
+            PickUp(pickableObject);
+        }
+    }
     
     // CRAFTEO MESA
-    private void CraftingSystem() {
-        if(Action1){
+    private void CraftingSystem(Collider col) {
+        Table table = col.GetComponent<Pickable>().table.GetComponent<Table>();
+        if (table != null) {
             table.Action();
+            crafting = true;
         }
     }
 

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1247803956591541563}
   - component: {fileID: 2724228210525833757}
   - component: {fileID: 3354568483914857548}
+  - component: {fileID: 7187068910794424583}
   m_Layer: 6
   m_Name: f_c_carne
   m_TagString: Pickable
@@ -48,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   touchingRB: 0
+  table: {fileID: 0}
 --- !u!54 &5913837340489993079
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -71,7 +73,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8272266158738209293}
-  m_Mesh: {fileID: -2432090755550338912, guid: c80be51d919affa4aab475013b0a968d, type: 3}
+  m_Mesh: {fileID: -2432090755550338912, guid: 3d61480cf6a55644da72043e9be1496d, type: 3}
 --- !u!23 &2724228210525833757
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -122,8 +124,21 @@ MeshCollider:
   m_GameObject: {fileID: 8272266158738209293}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: -2432090755550338912, guid: c80be51d919affa4aab475013b0a968d, type: 3}
+  m_Mesh: {fileID: -2432090755550338912, guid: 3d61480cf6a55644da72043e9be1496d, type: 3}
+--- !u!65 &7187068910794424583
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8272266158738209293}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5000011, y: 0.18750107, z: 0.5000011}
+  m_Center: {x: 0, y: -0.21875, z: 0}

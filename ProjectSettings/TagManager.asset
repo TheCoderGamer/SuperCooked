@@ -5,9 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Pickable
-  - InTable
   - MovingPlatform
   - FoodBoxHolo
+  - OnTable
   layers:
   - Default
   - TransparentFX

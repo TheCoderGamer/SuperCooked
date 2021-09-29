@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1731372744803929348}
   - component: {fileID: 242175372257071448}
   - component: {fileID: 7786230332055319379}
+  - component: {fileID: 4654768069100768126}
   m_Layer: 6
   m_Name: f_pc_pan
   m_TagString: Pickable
@@ -47,6 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29f74c1e1d75254f95f14943952e0f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchingRB: 0
+  table: {fileID: 0}
 --- !u!54 &2375230560490643814
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -121,8 +124,21 @@ MeshCollider:
   m_GameObject: {fileID: 2988113728958914180}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2432090755550338912, guid: 8f8cb08a20febc2459d0970c63067393, type: 3}
+--- !u!65 &4654768069100768126
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2988113728958914180}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5000011, y: 0.31250107, z: 0.5000011}
+  m_Center: {x: 0, y: -0.15625, z: 0}
