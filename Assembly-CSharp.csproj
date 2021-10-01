@@ -53,6 +53,7 @@
     <UnityVersion>2020.3.14f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\MidAirItemPickupPackage\CollisionDetector.cs" />
     <Compile Include="Assets\Scripts\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Pickable.cs" />
     <Compile Include="Assets\Scripts\FoodBox.cs" />
@@ -61,12 +62,12 @@
     <Compile Include="Assets\Scripts\Bin.cs" />
     <Compile Include="Assets\Scripts\Table.cs" />
     <Compile Include="Assets\Scripts\MovingPlatform.cs" />
+    <Compile Include="Assets\MidAirItemPickupPackage\PickUP.cs" />
     <Compile Include="Assets\Scripts\Killer.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\MovingStageSupport.cs" />
     <Compile Include="Assets\MidAirItemPickupPackage\RoundTo.cs" />
-    <Compile Include="Assets\MidAirItemPickupPackage\PickUP.cs" />
-    <Compile Include="Assets\MidAirItemPickupPackage\CollisionDetector.cs" />
+    <Compile Include="Assets\Scripts\Plato.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

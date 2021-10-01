@@ -16,9 +16,6 @@ public class Pickable : MonoBehaviour {
             this.gameObject.tag = "Pickable";
         }
         touchingRB = true;
-        /*if (collision.gameObject.name.StartsWith("e_mesa")){
-            //table = collision.gameObject;
-        }*/
     }
     private void OnCollisionExit() {
         touchingRB = false;

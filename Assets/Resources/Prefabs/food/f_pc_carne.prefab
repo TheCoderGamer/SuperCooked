@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 1999467242805684864}
   - component: {fileID: 252229018516461305}
   - component: {fileID: 8719408191131136431}
+  - component: {fileID: 7044781276909375354}
+  - component: {fileID: 8799290191026925361}
   m_Layer: 6
   m_Name: f_pc_carne
   m_TagString: Pickable
@@ -142,3 +144,29 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5000011, y: 0.18750107, z: 0.5000011}
   m_Center: {x: 0, y: -0.21875, z: 0}
+--- !u!114 &7044781276909375354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8420334662622083533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6927206533c4c7343b4096d7b56e23bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thisType: f_pc_carne
+--- !u!65 &8799290191026925361
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8420334662622083533}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.2, y: 0.42518294, z: 0.2}
+  m_Center: {x: 0, y: 0.0076702237, z: 0}

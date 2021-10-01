@@ -148,11 +148,11 @@ public class PlayerManager : MonoBehaviour {
     }
     private void PickUp(Rigidbody m_pickableObject) {
         pickable = m_pickableObject.GetComponent<Pickable>();
+        m_pickableObject.gameObject.layer = 0;
         move = true;
         holding = true;
         slotFull = true;
 
-        m_pickableObject.gameObject.layer = 0;
         m_pickableObject.useGravity = false;
         m_pickableObject.velocity = Vector3.zero;
         m_pickableObject.angularVelocity = Vector3.zero;
@@ -201,14 +201,14 @@ public class PlayerManager : MonoBehaviour {
     }
     IEnumerator FinishPickUp(Rigidbody _object) {
         // Finish (Evita Object Jumping)
-        while (pickableObject.velocity != Vector3.zero) {
+        while (_object != null && _object.velocity != Vector3.zero) {
             _object.gameObject.tag = "Untagged";
-            if (pickableObject.position.y < 0) {
-                pickableObject.velocity = Vector3.zero;
+            if (_object.position.y < 0) {
+                _object.velocity = Vector3.zero;
             }
             yield return null;
         }
-        if (pickableObject.velocity == Vector3.zero) {
+        if (_object != null && _object.velocity == Vector3.zero) {
             _object.gameObject.layer = 6;
             _object.gameObject.tag = "Pickable";
             finish = false;

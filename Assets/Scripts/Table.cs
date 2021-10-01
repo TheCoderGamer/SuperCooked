@@ -14,10 +14,11 @@ public class Table : MonoBehaviour {
     public bool disable = false;
     [SerializeField]private int tableType = 0; // 0 -> normal, 1 -> cortar, 2 -> freir
     private bool occupy = false;
-    private Collider colOnTable = null;
+    public Collider colOnTable = null;
     private Collider sarOnTable = null;
     private bool crafting = false;
     private bool conSarten = false;
+    private bool pickCrafted = false;
 
     Transform foodContainer;
 
@@ -47,8 +48,16 @@ public class Table : MonoBehaviour {
 
     private void OnTriggerStay(Collider collider) {
         if (disable) { return; }
+
+        if(pickCrafted && !pm.holding) {
+            PickUp(collider);
+            colOnTable = collider;
+            occupy = true;
+            pickCrafted = false;
+        }
+
         // Coger objeto
-        if (!occupy && !pm.holding && colOnTable != collider && collider.name.StartsWith("f_")) {
+        if ((!occupy && !pm.holding && colOnTable != collider && (collider.name.StartsWith("f_")) | (tableType == 0 && collider.name.StartsWith("u_plato")))) {
             PickUp(collider);
             colOnTable = collider;
             occupy = true;
@@ -65,6 +74,20 @@ public class Table : MonoBehaviour {
             sarOnTable = collider;
             conSarten = true;
         }
+        // Unir plato
+        if(occupy && tableType == 0 && !pm.holding && collider.name.StartsWith("f_")) {
+            Plato plato = colOnTable.GetComponent<Plato>();
+            if(plato != null) {
+                plato.CraftLogic(collider);
+            }
+        }
+        if (occupy && !pm.holding && collider.name.StartsWith("u_plato") && colOnTable.name.StartsWith("f_")) {
+            Plato plato = collider.GetComponent<Plato>();
+            if (plato != null) {
+                pickCrafted = plato.CraftLogic(colOnTable);
+            }
+        }
+
 
         if (occupy | conSarten) {
             if (colOnTable != null) { colOnTable.tag = "OnTable"; }
@@ -89,7 +112,7 @@ public class Table : MonoBehaviour {
                 sarOnTable = null;
                 conSarten = false;
                 occupy = false;
-                colOnTable.GetComponent<Pickable>().table = this.gameObject;
+                colOnTable.GetComponent<Pickable>().table = null;
                 GameObject _conOnTable = colOnTable.gameObject;
                 colOnTable = null;
                 return _conOnTable;
@@ -97,7 +120,7 @@ public class Table : MonoBehaviour {
             if (conSarten && occupy) {
                 conSarten = true;
                 occupy = false;
-                colOnTable.GetComponent<Pickable>().table = this.gameObject;
+                colOnTable.GetComponent<Pickable>().table = null;
                 GameObject _conOnTable = colOnTable.gameObject;
                 colOnTable = null;
                 return _conOnTable;
@@ -105,7 +128,7 @@ public class Table : MonoBehaviour {
             if (conSarten && !occupy) {
                 colOnTable = null;
                 conSarten = false;
-                sarOnTable.GetComponent<Pickable>().table = this.gameObject;
+                sarOnTable.GetComponent<Pickable>().table = null;
                 GameObject _sarOnTable = sarOnTable.gameObject;
                 sarOnTable = null;
                 return _sarOnTable;
