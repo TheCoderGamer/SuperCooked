@@ -10,11 +10,12 @@ public class Pickable : MonoBehaviour {
     private void Start() {
         this.transform.parent = GameObject.Find("/Stage/Food").transform;
     }
-    private void OnCollisionStay(Collision collision) {
-        if (collision.gameObject.tag == "MovingPlatform") {
+
+    private void OnCollisionEnter(Collision collision) {
+        /*if (collision.gameObject.tag.Equals("MovingPlatform")) {
             this.gameObject.layer = 6;
             this.gameObject.tag = "Pickable";
-        }
+        }*/
         touchingRB = true;
     }
     private void OnCollisionExit() {

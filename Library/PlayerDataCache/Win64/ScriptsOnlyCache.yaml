@@ -1,10 +1,13 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - Bin
     - CameraManager
     - FoodBox
+    - MovingPlatform
     - MovingStageSupport
     - Pickable
+    - Plato
     - PlayerManager
     - PlayerMovement
     - Table
@@ -53,25 +56,31 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1476}
+      Script: {instanceID: 1478}
     - Class: 114
-      Script: {instanceID: 1902}
+      Script: {instanceID: 1904}
     - Class: 114
-      Script: {instanceID: 1910}
+      Script: {instanceID: 1912}
     - Class: 114
-      Script: {instanceID: 2226}
+      Script: {instanceID: 2228}
     - Class: 114
-      Script: {instanceID: 2278}
+      Script: {instanceID: 2280}
     - Class: 114
-      Script: {instanceID: 2386}
+      Script: {instanceID: 2388}
     - Class: 114
-      Script: {instanceID: 2478}
+      Script: {instanceID: 2480}
     - Class: 114
-      Script: {instanceID: 2954}
+      Script: {instanceID: 2678}
     - Class: 114
-      Script: {instanceID: 4016}
+      Script: {instanceID: 2956}
     - Class: 114
-      Script: {instanceID: 4082}
+      Script: {instanceID: 3084}
+    - Class: 114
+      Script: {instanceID: 3410}
+    - Class: 114
+      Script: {instanceID: 4020}
+    - Class: 114
+      Script: {instanceID: 4086}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 134
@@ -173,7 +182,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: e21dd704f1f133fb47570337a9ec9c7d
+      Hash: 410dc5264a8e1bb269cddd650094789a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerManager
@@ -185,7 +194,7 @@ ScriptsOnlyBuild:
     className: GroupTrack
   - hash:
       serializedVersion: 2
-      Hash: 4b0c48b2be4bc4d39f8bb86ca7b9c02e
+      Hash: 48e7a4a71956fbb37a982b5b1324d311
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Pickable
@@ -371,7 +380,7 @@ ScriptsOnlyBuild:
     className: Outline
   - hash:
       serializedVersion: 2
-      Hash: cee2cfdfb3144423b51edc7b932c39f4
+      Hash: 7c51b4e385ceab800ecedc74a7d18770
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Table
@@ -477,6 +486,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: Mask
+  - hash:
+      serializedVersion: 2
+      Hash: d6c3b8fe3deb75e75d8655b04a9edc5b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Plato
   - hash:
       serializedVersion: 2
       Hash: c3d3430df9e3ea95e3e3d587961390fb
@@ -600,4 +615,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/Level1.unity
-  playerPath: C:/Users/TheCo/Desktop/SC/SuperCooked.exe
+  playerPath: C:/DEV/SuperCooked/OUT/V0.2.2/SuperCooked.exe

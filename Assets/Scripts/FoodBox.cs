@@ -4,29 +4,32 @@ using UnityEngine;
 
 public class FoodBox : MonoBehaviour
 {
+    private bool delay = false;
     string[] foodPrefabs = new string[] {
-        "f_carne",
+        "f__carne",
         "f_f_carne",
         "f_c_carne",
         "f_cf_carne",
         "f_pc_carne",
         "f_pcf_carne",
-        "f_queso",
+        "f__queso",
         "f_c_queso",
         "f_pc_queso",
-        "f_pan",
+        "f__pan",
         "f_pc_pan",
         "f_c_pan",
         "f_p_hambur",
         "f_p_hamburQueso"
     };
     public int food = 0;
-    
+
+    Transform foodParent;
     Transform holoZone;
     Vector3 holoZonePos;
     Quaternion holoZoneRot;
 
     void Start() {
+        foodParent = GameObject.Find("/Stage/Food").transform;
         holoZone = this.transform.GetChild(0);
         holoZonePos = holoZone.position;
         holoZoneRot = holoZone.rotation;
@@ -41,7 +44,16 @@ public class FoodBox : MonoBehaviour
     }
 
     public GameObject Pick() {
+        if (delay) { return null; }
+        if (foodParent.childCount > 30) { return null; }
+
         GameObject gameObject = Instantiate(Resources.Load("Prefabs/food/" + foodPrefabs[food]), holoZonePos, holoZoneRot) as GameObject;
+        StartCoroutine(Delay());   
         return gameObject;
+    }
+    IEnumerator Delay() {
+        delay = true;
+        yield return new WaitForSeconds(1);
+        delay = false;
     }
 }

@@ -54,6 +54,7 @@ public class MovingStageSupport : MonoBehaviour {
     void OnControllerColliderHit(ControllerColliderHit hit) {
         // Make sure we are really standing on a straight platform *NEW*
         // Not on the underside of one and not falling down from it either!
+        if(hit.gameObject.tag.Equals("Pickable")) { return; }
         pmt = hit.controller.GetComponent<PlayerMovement>();
         if (hit.moveDirection.y < -0.9 && hit.normal.y > 0.41) {
             if (activePlatform != hit.collider.transform) {

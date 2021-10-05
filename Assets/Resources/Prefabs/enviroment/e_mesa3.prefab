@@ -53,6 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   disable: 0
   tableType: 1
+  colOnTable: {fileID: 0}
 --- !u!33 &8796707721705891259
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -127,8 +128,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.3692503, z: 1}
-  m_Center: {x: 0, y: -0.18645018, z: 0}
+  m_Size: {x: 1, y: 0.61307573, z: 1}
+  m_Center: {x: 0, y: -0.06453748, z: 0}
 --- !u!65 &2957871782339268381
 BoxCollider:
   m_ObjectHideFlags: 0

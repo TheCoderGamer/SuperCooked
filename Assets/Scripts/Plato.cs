@@ -7,18 +7,19 @@ public class Plato : MonoBehaviour {
     PlayerManager pm;
     Collider food;
     public bool crafting = false;
+    public bool platoExtra2 = false;
     [SerializeField]private string thisType = "u_plato";
     string[] foodPrefabs = new string[] {
-        "f_carne",
+        "f__carne",
         "f_f_carne",
         "f_c_carne",
         "f_cf_carne",
         "f_pc_carne",
         "f_pcf_carne",
-        "f_queso",
+        "f__queso",
         "f_c_queso",
         "f_pc_queso",
-        "f_pan",
+        "f__pan",
         "f_pc_pan",
         "f_c_pan",
         "f_p_hambur",
@@ -79,10 +80,15 @@ public class Plato : MonoBehaviour {
                 pk.table.GetComponent<Table>().colOnTable = _gameObject.GetComponent<Collider>();
             }
         }
-
-
+        // Plato Extra
         if (platoExtra) {
-            Instantiate(Resources.Load("Prefabs/utils/u_plato"), food.transform.position, food.transform.rotation);
+            if (platoExtra2) {
+                Instantiate(Resources.Load("Prefabs/utils/u_plato"), this.transform.position, this.transform.rotation);
+            }
+            else {
+                Instantiate(Resources.Load("Prefabs/utils/u_plato"), food.transform.position, food.transform.rotation);
+            }
+            platoExtra2 = false;
         }
         // Destruir ingredientes
         Destroy(food.gameObject);
