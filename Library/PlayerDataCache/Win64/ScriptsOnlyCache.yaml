@@ -56,31 +56,31 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1478}
+      Script: {instanceID: 1476}
     - Class: 114
-      Script: {instanceID: 1904}
+      Script: {instanceID: 1900}
     - Class: 114
-      Script: {instanceID: 1912}
+      Script: {instanceID: 1908}
     - Class: 114
-      Script: {instanceID: 2228}
+      Script: {instanceID: 2224}
     - Class: 114
-      Script: {instanceID: 2280}
+      Script: {instanceID: 2276}
     - Class: 114
-      Script: {instanceID: 2388}
+      Script: {instanceID: 2384}
     - Class: 114
-      Script: {instanceID: 2480}
+      Script: {instanceID: 2476}
     - Class: 114
-      Script: {instanceID: 2678}
+      Script: {instanceID: 2674}
     - Class: 114
-      Script: {instanceID: 2956}
+      Script: {instanceID: 2952}
     - Class: 114
-      Script: {instanceID: 3084}
+      Script: {instanceID: 3080}
     - Class: 114
-      Script: {instanceID: 3410}
+      Script: {instanceID: 3406}
     - Class: 114
-      Script: {instanceID: 4020}
+      Script: {instanceID: 4014}
     - Class: 114
-      Script: {instanceID: 4086}
+      Script: {instanceID: 4080}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 134
@@ -168,12 +168,6 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: Shadow
-  - hash:
-      serializedVersion: 2
-      Hash: a1dc31ffc77b8d754810d4a12ff16685
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: CollisionDetector
   - hash:
       serializedVersion: 2
       Hash: 300fd99066f8c288e85f5e81ce65fe34
@@ -548,12 +542,6 @@ ScriptsOnlyBuild:
     className: TMP_SubMeshUI
   - hash:
       serializedVersion: 2
-      Hash: bbdecc16cb458fcca5e243c5fba01370
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: PickUP
-  - hash:
-      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
@@ -596,12 +584,6 @@ ScriptsOnlyBuild:
     className: ActivationPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: 61d72055d787f9a1bccb03518bdd2187
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: RoundTo
-  - hash:
-      serializedVersion: 2
       Hash: 7ab0e790220bdca831fdd886b339039d
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -615,4 +597,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/Level1.unity
-  playerPath: C:/DEV/SuperCooked/OUT/V0.2.2/SuperCooked.exe
+  playerPath: C:/DEV/SuperCooked/OUT/current/SuperCooked.exe
